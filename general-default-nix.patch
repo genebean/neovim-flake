@@ -1,0 +1,112 @@
+--- a/modules/shared/home/general/default.nix
++++ b/modules/shared/home/general/default.nix
+@@ -1,6 +1,5 @@
+ {
+   config,
+-  inputs,
+   pkgs,
+   ...
+ }:
+@@ -10,15 +9,6 @@
+       "aarch64-darwin"
+       "x86_64-darwin"
+     ]
+-  then
+-    "libsqlite3.dylib"
+-  else
+-    "libsqlite3.so";
+-in
+-# NOTE: sqlite_lib and the entire let block can be removed once the
+-# nvim flake is wired in, since that logic now lives in flake.nix.
+-# Leave the let/in if other things in this file still need it.
+ in
+ {
+   home = {
+@@ -31,8 +21,6 @@
+       fd
+       f2
+       git-filter-repo
+       glab
+       glow
+       gomuks
+       gotop
+       htop
+       httpie
+       hub
+-      inputs.nix-auth.packages.${stdenv.hostPlatform.system}.default
++      inputs.nix-auth.packages.${pkgs.stdenv.hostPlatform.system}.default
+       jq
+       lazydocker
+       lazygit
+-      lua-language-server    # <-- REMOVE: now in nvim extraPackages
+       minicom
+       mtr
+-      nil                    # <-- REMOVE: now in nvim extraPackages
+       nix-search
+       nix-zsh-completions
+       nodejs
+       nurl
+       nvd
+       nixfmt-tree
+       onefetch
+       powershell
+       pre-commit
+-      puppet-lint            # <-- REMOVE: now in nvim extraPackages
+-      rename
++      rename
+       ruby
+       subversion
+       statix
+       tldr
+       tree
+       trippy
+       vimv
+       watch
+       wget
+       yq-go
+     ];
+@@ -55,17 +40,6 @@
+     file = {
+-      ".config/nvim/lua/config" = {
+-        source = ../../files/nvim/lua/config;
+-        recursive = true;
+-      };
+-      ".config/nvim/lua/plugins" = {
+-        source = ../../files/nvim/lua/plugins;
+-        recursive = true;
+-      };
+       ".config/powershell/Microsoft.PowerShell_profile.ps1".source =
+         ../../files/Microsoft.PowerShell_profile.ps1;
+       ".config/powershell/Microsoft.VSCode_profile.ps1".source =
+         ../../files/Microsoft.PowerShell_profile.ps1;
+     };
+   };
+@@ -180,30 +154,7 @@
+-    neovim = {
+-      enable = true;
+-      defaultEditor = true;
+-      extraLuaConfig = ''
+-        -- setup lazy.nvim
+-        local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+-        vim.opt.rtp:prepend(lazypath)
+-
+-        -- hack to deal with bug in telescope-cheat.nvim
+-        local cheat_dbdir = vim.fn.stdpath "data" .. "/databases"
+-        if not vim.loop.fs_stat(cheat_dbdir) then
+-          vim.loop.fs_mkdir(cheat_dbdir, 493)
+-        end
+-
+-        require("config.vim-options")
+-        require("lazy").setup("plugins")
+-
+-        vim.g.sqlite_clib_path = '${pkgs.sqlite.out}/lib/${sqlite_lib}'
+-      '';
+-      extraPackages = with pkgs; [
+-        gcc
+-        sqlite
+-      ];
+-      plugins = [ pkgs.vimPlugins.lazy-nvim ];
+-    };
++    # neovim is now managed by the genebean-neovim flake.
++    # See inputs.genebean-neovim and the homeManagerModules.default import.
++    genebean-neovim.enable = true;

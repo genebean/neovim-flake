@@ -1,0 +1,4 @@
+# pkgs/puppet-editor-services/Gemfile
+source 'https://rubygems.org'
+
+gem 'puppet-editor-services'
