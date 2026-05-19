@@ -34,7 +34,10 @@
       packages = forAllSystems (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
 
           # Build puppet-editor-services from rubygems
           puppet-editor-services = pkgs.callPackage ./pkgs/puppet-editor-services { };
