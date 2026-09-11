@@ -74,7 +74,7 @@
                 # LSP servers, formatters, linters, and other runtime tools.
                 # These replace Mason entirely.
                 # ---------------------------------------------------------------
-                extraPackages = with pkgs; [
+                runtimePkgs = with pkgs; [
                   # LSP servers
                   lemminx # XML
                   lua-language-server # Lua
