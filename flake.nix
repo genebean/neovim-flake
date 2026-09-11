@@ -43,7 +43,7 @@
           puppet-editor-services = pkgs.callPackage ./pkgs/puppet-editor-services { };
 
           # Platform-appropriate sqlite lib name
-          sqlite_lib = if pkgs.stdenv.isDarwin then "libsqlite3.dylib" else "libsqlite3.so";
+          sqlite_lib = if pkgs.stdenv.hostPlatform.isDarwin then "libsqlite3.dylib" else "libsqlite3.so";
 
           # The neovim wrapper module.
           # evalPackage takes a list of modules; pkgs is passed as a module arg.
